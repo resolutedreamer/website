@@ -5,6 +5,10 @@ from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.http import HttpResponse
+from django.contrib.auth import authenticate, login
+from django.forms.forms import NON_FIELD_ERRORS
+from django.conf import settings
+from django.core.urlresolvers import reverse
 
 from .models import Greeting
 from .forms import SubscriberForm
@@ -43,7 +47,15 @@ def subscriber_new (request, template='subscriber_new.html'):
             sub = Subscriber(address_one = address_one, address_two = address_two, city=city, state=state, user_rec=user)
             sub.save()
 
-            return HttpResponseRedirect('/success/')
+            a_u = authenticate(username = username, password=password)
+            if a_u is not None:
+                if a_u.is_active:
+                    login(request, a_u)
+                    return HttpResponseRedirect(reverse('account_list'))
+                else:
+                    return HttpResponseRedirect(reverse('django.contrib.auth.views.login'))
+            else:
+                return HttpResponseRedirect(reverse('sub_new'))
     else:
         form = SubscriberForm()
     return render(request, template, {'form':form})

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.conf import settings
 
 # Create your models here.
 class Greeting(models.Model):
@@ -18,3 +19,5 @@ class Subscriber (models.Model):
 
     def __unicode__(self):
         return u"%s's Subscription Info" % self.user_rec
+
+    #TODO def twof?
