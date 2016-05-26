@@ -2,19 +2,14 @@ import os
 import requests
 
 from django.shortcuts import render
-from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.http import HttpResponse
-from django.contrib.auth import authenticate, login
-from django.forms.forms import NON_FIELD_ERRORS
 from django.conf import settings
 from django.core.urlresolvers import reverse
 
-from .models import Greeting
-from .forms import SubscriberForm
-from .models import Subscriber
-
-# Create your views here.
+from .forms import CustomerForm
+from .forms import LoginForm
+from .models import Customer
 
 def index(request):
     #return HttpResponse('Hello from Python!')
@@ -26,46 +21,85 @@ def index(request):
     #times = int(os.environ.get('TIMES',3))
     #return HttpResponse('Hello! ' * times)
 
-def subscriber_new (request, template='subscriber_new.html'):
+def customer_new (request, template='customer_new.html'):
     if request.method == 'POST':
-        form = SubscriberForm(request.POST)
+        form = CustomerForm(request.POST)
         if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            email = form.cleaned_data['email']
-            first_name = form.cleaned_data['first_name']
-            last_name = form.cleaned_data['last_name']
-
-            user = User(username = username, email = email, first_name = first_name, last_name = last_name)
-            user.set_password(password)
-            user.save()
-
-            address_one = form.cleaned_data['address_one']
-            address_two = form.cleaned_data['address_two']
-            city = form.cleaned_data['city']
-            state = form.cleaned_data['state']
-            sub = Subscriber(address_one = address_one, address_two = address_two, city=city, state=state, user_rec=user)
-            sub.save()
-
-            a_u = authenticate(username = username, password=password)
-            if a_u is not None:
-                if a_u.is_active:
-                    login(request, a_u)
-                    return HttpResponseRedirect(reverse('account_list'))
-                else:
-                    return HttpResponseRedirect(reverse('django.contrib.auth.views.login'))
+            username = form.cleaned_data.get('username')
+            if username:
+                print('cleaned username:' + username)
             else:
-                return HttpResponseRedirect(reverse('sub_new'))
+                print('no username')
+            password = form.cleaned_data.get('password')
+            if password:
+                print('cleaned password: ' + password)
+            else:
+                print('no password')
+            email = form.cleaned_data.get('email')
+            if email:
+                print('cleaned email: ' + email)
+            else:
+                print('no email')
+            phone = form.cleaned_data.get('phone')
+            if phone:
+                print('cleaned phone: ' + phone)
+            else:
+                print('no phone')
+
+            customer = Customer(username=username, password=password, email=email, phone=phone)
+            customer.save()
+
+            #return HttpResponseRedirect('success.html')
+            return render(request, 'success.html') 
+
     else:
-        form = SubscriberForm()
+        form = CustomerForm()
+    
     return render(request, template, {'form':form})
 
-def db(request):
+def success(request):
+    return render(request, 'success.html')
 
-    greeting = Greeting()
-    greeting.save()
+def login(request, template='login.html'):
+    print('log in time!')
+    form = LoginForm()
+    if request.method == 'POST':
+        print ('checking post')
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            if username:
+                print('cleaned username:' + username)
+            else:
+                print('no username')
+            password = form.cleaned_data.get('password')
+            if password:
+                print('cleaned password: ' + password)
+            else:
+                print('no password')
+    
+            try:
+                customer = Customer.objects.get(username=username)
+            except Customer.DoesNotExist:
+                customer = None
 
-    greetings = Greeting.objects.all()
+            if customer == None:
+                return HttpResponse('username does not exist. please go sign up for an account')
+            else:
+                if password == customer.password:
+                    return HttpResponseRedirect('success.html')
+                else:
+                    return HttpResponse('password is incorrect!')
+        else: 
+            form = LoginForm()
+    return render(request, template, {'form':form})
 
-    return render(request, 'db.html', {'greetings': greetings})
+#def db(request):
+
+#    greeting = Greeting()
+#    greeting.save()
+
+#    greetings = Greeting.objects.all()
+
+#    return render(request, 'db.html', {'greetings': greetings})
 

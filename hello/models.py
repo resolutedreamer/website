@@ -1,23 +1,14 @@
 from django.db import models
-from django.contrib.auth.models import User
 from django.conf import settings
 
-# Create your models here.
-class Greeting(models.Model):
-    when = models.DateTimeField('date created', auto_now_add=True)
-
-class Subscriber (models.Model):
-    user_rec = models.ForeignKey(User)
-    address_one = models.CharField(max_length=100)
-    address_two = models.CharField(max_length=100, blank=True)
-    city = models.CharField(max_length=50)
-    state = models.CharField(max_length=2)
-    stripe_id = models.CharField(max_length=30, blank=True)
+class Customer(models.Model):
+    username = models.CharField(max_length=30, primary_key=True)
+    password = models.CharField(max_length=30, blank=False)
+    email = models.CharField(max_length=30, blank=False)
+    phone = models.CharField(max_length=10, blank=False)
 
     class Meta: 
-        verbose_name_plural = 'subscribers'
+        verbose_name_plural = 'customers'
 
     def __unicode__(self):
-        return u"%s's Subscription Info" % self.user_rec
-
-    #TODO def twof?
+        return u"%s's Customer Info" % self.username

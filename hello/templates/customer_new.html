@@ -7,49 +7,38 @@
             <form id="user-reg-form" action="." method="post">
                 {% csrf_token %}
                 {# Username & Password Section #}
-                <h3>Signup for a $15 Monthly Subscription</h3>
+                <h3>Signup for an ccount</h3>
                 <h5 class="sn-sh">CREATE A USERNAME AND PASSWORD</h5>
                 <table class="table">
                     <tbody>
                         <tr>
                             <th>{{ form.username.label }}</th>
                             <th>{{ form.email.label }}</th>
+			    <th>{{ form.phone.label }}</th>
                         </tr>
                         <tr>
                             <td>{{ form.username }}</td>
                             <td>{{ form.email }}</td>
+			    <td>{{ form.phone }}</td>
                         </tr>
                         <tr>
                             <td>{{ form.username.errors }}</td>
                             <td>{{ form.email.errors }}</td>
-                        </tr>
-			<tr>
-			  <th>Phone Number</th>
-			</tr>
-			<tr>
-			  <td>{{ form.phone }}</td>
-			</tr>
-			<tr>
-			  <td>{{ form.phone.errors }}</td>
-			</tr>
-                        <tr>
-                            <th>Password</th>
-                            <th>Confirm Password</th>
+			    <td>{{ form.phone.errors }}</td>
                         </tr>
                         <tr>
-                            <td>{{ form.password1 }}</td>
-                            <td>{{ form.password2 }}</td>
+                            <th>{{ form.password.label }}</th>
                         </tr>
                         <tr>
-                            <td>{{ form.password1.errors }}</td>
-                            <td>{{ form.password2.errors }}</td>
+                            <td>{{ form.password }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ form.password.errors }}</td>
                         </tr>
                     </tbody>
                 </table>
-                {# Billing Address Section #}
                 <input class="btn btn-primary" type="submit" value="submit">
             </form>
-            {# Credit Card Section #}
         </div>
     </div>
 {% endblock content %}
