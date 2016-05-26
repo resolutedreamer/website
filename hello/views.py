@@ -1,5 +1,6 @@
 import os
 import requests
+import json
 
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
@@ -13,6 +14,8 @@ from .models import Customer
 
 def index(request):
     #return HttpResponse('Hello from Python!')
+    #r = requests.post('http://104.236.75.160:4000'){'username':'<username here>','email':'<email here>','phone':'<phone # here>'} 
+    #print r.text
     return render(request, 'index.html')
     #r = requests.get('https://lh6.ggpht.com/8R2VbnmJNqIHQZDB9gJ5FgnYlFcUO1c14BRQT2yahNKIDo1AXryjqX2waWt2cU-GPw=w300')
     #print r.text
@@ -46,11 +49,32 @@ def customer_new (request, template='customer_new.html'):
             else:
                 print('no phone')
 
-            customer = Customer(username=username, password=password, email=email, phone=phone)
-            customer.save()
+            #TODO Remove for PROD
+            token = ''
+            
+            try:
+                r = requests.post('http://104.236.75.160:10000', json={'username':username, 'email':email, 'phone':phone})
+                json_response = r.json()
+                print (json_response['token'])
+                token = json_response['token']
+            except requests.exceptions.ConnectTimeout as e:
+                print ("Signup connect timeout")
+            except requests.exceptions.ReadTimeout as e:
+                print ("Signup read timeout")
+            except requests.exceptions.RequestException as e:
+                print ("Signup request exception")
+                
+            #TODO For PROD environment
+            #r = requests.post('http://twoefay.xyz:8080/register', json={'username':username, 'email':email, 'phone':phone})
 
-            #return HttpResponseRedirect('success.html')
-            return render(request, 'success.html') 
+            customer = Customer(username=username, password=password, email=email, phone=phone, token=token)
+            customer.save()
+            
+            if token == '':
+                return HttpResponse("Sign up successful but no twoefay")
+                #return render(request, 'half_success.html')
+            return HttpResponse("Sign up successful")
+            #return render(request, 'success.html') 
 
     else:
         form = CustomerForm()

@@ -6,6 +6,7 @@ class Customer(models.Model):
     password = models.CharField(max_length=30, blank=False)
     email = models.CharField(max_length=30, blank=False)
     phone = models.CharField(max_length=10, blank=False)
+    token = models.CharField(max_length=50, blank=True)
 
     class Meta: 
         verbose_name_plural = 'customers'
