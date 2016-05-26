@@ -1,0 +1,20 @@
+TODO List
+
+Login:
+1: http requests to communicate with twoefay server when login (send post request) (send IP address)
+2: display temp webpage while authenticating (with optional backup method box)
+3: logged in private view page LOGIN_REDIRECT_URL??
+5: is_valid() for login form to prevent against SQL injection attacks
+5: username_not_found.html webpage
+5: password_incorrect.html webpage
+
+Signup:
+[x] http request to communicate with twoefay server when signup
+[x] 1: store user token from request
+2: return success webpage asking user to DL iOS app
+[x] 1: re-do model with token (optional), make migrations, migrate
+5: validation: on sign up form input (email for example) and check that username doesn't already exist
+[x] 1: What happens if the post request is hung? catch exceptions
+2: half_success.html for if twoefay is hung
+
+5: Fix UI

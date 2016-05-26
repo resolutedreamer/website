@@ -81,6 +81,7 @@ def customer_new (request, template='customer_new.html'):
     
     return render(request, template, {'form':form})
 
+#TODO Remove in PROD
 def success(request):
     return render(request, 'success.html')
 
@@ -88,7 +89,7 @@ def login(request, template='login.html'):
     print('log in time!')
     form = LoginForm()
     if request.method == 'POST':
-        print ('checking post')
+        print ('login form post')
         form = LoginForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data.get('username')
@@ -111,6 +112,7 @@ def login(request, template='login.html'):
                 return HttpResponse('username does not exist. please go sign up for an account')
             else:
                 if password == customer.password:
+                    #TODO ????
                     return HttpResponseRedirect('success.html')
                 else:
                     return HttpResponse('password is incorrect!')
