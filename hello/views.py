@@ -53,6 +53,7 @@ def customer_new (request, template='customer_new.html'):
             token = ''
             
             try:
+                #r = requests.post('https://twoefay.xyz:8080/register', verify=False, json={'username':username, 'email':email, 'phone':phone})     
                 r = requests.post('http://104.236.75.160:10000', json={'username':username, 'email':email, 'phone':phone})
                 json_response = r.json()
                 print (json_response['token'])
@@ -61,8 +62,8 @@ def customer_new (request, template='customer_new.html'):
                 print ("Signup connect timeout")
             except requests.exceptions.ReadTimeout as e:
                 print ("Signup read timeout")
-            except requests.exceptions.RequestException as e:
-                print ("Signup request exception")
+            #except requests.exceptions.RequestException as e:
+            #    print ("Signup request exception")
                 
             #TODO For PROD environment
             #r = requests.post('http://twoefay.xyz:8080/register', json={'username':username, 'email':email, 'phone':phone})
