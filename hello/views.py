@@ -113,8 +113,26 @@ def login(request, template='login.html'):
                 return HttpResponse('username does not exist. please go sign up for an account')
             else:
                 if password == customer.password:
-                    #TODO ????
-                    return HttpResponseRedirect('success.html')
+                    if customer.token == '':
+                        return HttpResponse('successful sign in but no twoefay')
+                    else:
+                        verified = 'False'
+                        try:
+                            r = requests.post('http://104.236.75.160:10000', json={'token':customer.token})
+                            json_response = r.json()
+                            verified = json_response['verified']
+                            print('verified' + verified)
+                        except requests.exceptions.ReadTimeout as e:
+                            print ("Login read timeout")
+                        except requests.exceptions.ConnectTimeout as e:
+                            print ("Login connect timeout")
+
+                        if verified == 'True':
+                            return HttpResponse('successful sign in')
+                        else: 
+                            #TODO Want to have backup method
+                            return HttoResponse('unsuccessful twoefay sign in')
+                    #return HttpResponseRedirect('success.html')
                 else:
                     return HttpResponse('password is incorrect!')
         else: 
