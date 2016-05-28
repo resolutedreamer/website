@@ -11,3 +11,6 @@ class CustomerForm(forms.Form):
 class LoginForm(forms.Form):
     username = forms.CharField()
     password = forms.CharField()
+
+class BackupForm(forms.Form):
+    otp = forms.CharField()

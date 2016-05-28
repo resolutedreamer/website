@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Backup Twoefay{% endblock title %}
+
+{% block content %}
+    <div id="content-container" class="container p-none">
+        <div class="side-p">
+            <form id="user-reg-form" action="." method="post">
+                {% csrf_token %}
+                <h3>Twoefay Authentication Backup Method</h3>
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th>{{ form.otp.label }}</th>
+                        </tr>
+                        <tr>
+                            <td>{{ form.otp }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+		{% if form.errors %}
+                    <p class=" label label-danger">
+                        Your otp is incorrect.
+                        Please try again.
+                    </p>
+                {% endif %}
+                <input class="btn btn-primary" type="submit" value="submit">
+            </form>
+        </div>
+    </div>
+{% endblock content %}
