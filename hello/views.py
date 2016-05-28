@@ -14,16 +14,16 @@ from .forms import LoginForm
 from .forms import BackupForm
 from .models import Customer
 
-def index(request):
-    r = requests.post('http://twoefay.xyz:8080/register', json={'username' : 'test', 'email': 'email', 'phone':'phone'})
-    print (r.json()['authenticated'])
-    return HttpResponse('hi')
-    #r = requests.get('https://lh6.ggpht.com/8R2VbnmJNqIHQZDB9gJ5FgnYlFcUO1c14BRQT2yahNKIDo1AXryjqX2waWt2cU-GPw=w300')
-    #print r.text
-    #return HttpResponse('<pre>' + r.text + '</pre>')
+#Uncomment during testing
+HTTP_TEST = 'http://http.test.twoefay.xyz'
+#Uncomment in PROD
+#HTTP_TEST = 'https://https.test.twoefay.xyz'
+#PORT = ':8080'
 
-    #times = int(os.environ.get('TIMES',3))
-    #return HttpResponse('Hello! ' * times)
+def index(request):
+    #r = requests.post(HTTP_TEST + PORT + '/register', json={'username' : 'test', 'email': 'email', 'phone':'phone'})
+    #print (r.json()['authenticated'])
+    return HttpResponse('hi, go away this page isnt finished yet')
 
 def customer_new (request, template='customer_new.html'):
     if request.method == 'POST':
@@ -59,7 +59,7 @@ def customer_new (request, template='customer_new.html'):
                 #r = s.post("https://twoefay.xyz/register", json={'username':username, 'email':email, 'phone':phone})
                 
                 #For test env:
-                r = requests.post('http://http.test.twoefay.xyz/register', json={'username':username, 'email':email, 'phone':phone})
+                r = requests.post(HTTP_TEST + '/register', json={'username':username, 'email':email, 'phone':phone})
                 print (r.content)
                 json_response = r.json()
                 print (json_response['token'])
@@ -149,7 +149,7 @@ def login(request):
                     else:
                         verified = 'False'
                         try:
-                            r = requests.post('http://http.test.twoefay.xyz/login', json={'token':customer.token})
+                            r = requests.post(HTTP_TEST + '/login', json={'token':customer.token})
                             print (r.json()['login'])
                             json_response = r.json()
                             #TODO Remove in PROD
@@ -204,7 +204,7 @@ def login(request):
                 if 'member_id' in request.session:
                     username = request.session['member_id']
                     print ('username: ' + username)
-                    r = requests.post('http://http.test.twoefay.xyz/backup', json={'username':username, 'otp':otp})
+                    r = requests.post(HTTP_TEST + '/backup', json={'username':username, 'otp':otp})
                     print (r.content)
                     json_response = r.json()
                     print (json_response['login'])
@@ -257,7 +257,7 @@ def backup_deprecated(request, template='backup.html'):
                     if 'member_id' in request.session:
                         username = request.session['member_id']
                         print ('username: ' + username)
-                        r = requests.post('http://http.test.twoefay.xyz/backup', json={'username':username, 'otp':otp})
+                        r = requests.post(HTTP_TEST + '/backup', json={'username':username, 'otp':otp})
                         print (r.content)
                         json_response = r.json()
                         print (json_response['login'])
