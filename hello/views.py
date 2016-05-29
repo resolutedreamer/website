@@ -15,15 +15,20 @@ from .forms import BackupForm
 from .models import Customer
 
 #Uncomment during testing
-HTTP_TEST = 'http://http.test.twoefay.xyz'
+#HTTP_TEST = 'http://http.test.twoefay.xyz'
+#Uncomment in https testing
+HTTP_TEST = 'https://https.test.twoefay.xyz'
 #Uncomment in PROD
-#HTTP_TEST = 'https://https.test.twoefay.xyz'
+#HTTP_TEST = 'https://twoefay.xyz'
 #PORT = ':8080'
+
+s  = requests.Session()                                                                                                                                                     
+s.mount("https://twoefay.xyz", HTTP20Adapter())  
 
 def index(request):
     #r = requests.post(HTTP_TEST + PORT + '/register', json={'username' : 'test', 'email': 'email', 'phone':'phone'})
     #print (r.json()['authenticated'])
-    return HttpResponse('hi, go away this page isnt finished yet')
+    return render(request, 'index.html', {'member_id':'32353'})
 
 def customer_new (request, template='customer_new.html'):
     if request.method == 'POST':
@@ -56,10 +61,10 @@ def customer_new (request, template='customer_new.html'):
                 #TODO For PROD:
                 #s = requests.Session()
                 #s.mount("https://twoefay.xyz", HTTP20Adapter())
-                #r = s.post("https://twoefay.xyz/register", json={'username':username, 'email':email, 'phone':phone})
+                r = s.post(HTTP_TEST + '/register', json={'username':username, 'email':email, 'phone':phone})
                 
                 #For test env:
-                r = requests.post(HTTP_TEST + '/register', json={'username':username, 'email':email, 'phone':phone})
+                #r = requests.post(HTTP_TEST + '/register', json={'username':username, 'email':email, 'phone':phone})
                 print (r.content)
                 json_response = r.json()
                 print (json_response['token'])
@@ -68,8 +73,8 @@ def customer_new (request, template='customer_new.html'):
                 print ("Signup connect timeout")
             except requests.exceptions.ReadTimeout as e:
                 print ("Signup read timeout")
-            except requests.exceptions.RequestException as e:
-                print ("Signup request exception")
+            #except requests.exceptions.RequestException as e:
+            #    print ("Signup request exception")
                 
             customer = Customer(username=username, password=password, email=email, phone=phone, token=token)
             customer.save()
@@ -147,9 +152,10 @@ def login(request):
                         return HttpResponse('successful one-factor twoefay.')
                         #TODO Include link to sign up for two-factor on a one-factor account
                     else:
-                        verified = 'False'
+                        verified = 'failure'
                         try:
-                            r = requests.post(HTTP_TEST + '/login', json={'token':customer.token})
+                            r = s.post(HTTP_TEST + '/login', json={'token' : customer.token})
+                            #r = requests.post(HTTP_TEST + '/login', json={'token':customer.token})
                             print (r.json()['login'])
                             json_response = r.json()
                             #TODO Remove in PROD
@@ -204,7 +210,8 @@ def login(request):
                 if 'member_id' in request.session:
                     username = request.session['member_id']
                     print ('username: ' + username)
-                    r = requests.post(HTTP_TEST + '/backup', json={'username':username, 'otp':otp})
+                    r = s.post(HTTP_TEST + '/backup', json={'username':username, 'otp':otp})
+                    #r = requests.post(HTTP_TEST + '/backup', json={'username':username, 'otp':otp})
                     print (r.content)
                     json_response = r.json()
                     print (json_response['login'])
@@ -257,7 +264,8 @@ def backup_deprecated(request, template='backup.html'):
                     if 'member_id' in request.session:
                         username = request.session['member_id']
                         print ('username: ' + username)
-                        r = requests.post(HTTP_TEST + '/backup', json={'username':username, 'otp':otp})
+                        r = s.post(HTTP_TEST + '/backup', json={'username':username, 'otp':otp})
+                        #r = requests.post(HTTP_TEST + '/backup', json={'username':username, 'otp':otp})
                         print (r.content)
                         json_response = r.json()
                         print (json_response['login'])
