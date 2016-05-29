@@ -3,6 +3,7 @@ import requests
 import json
 
 from hyper.contrib import HTTP20Adapter
+from hyper import HTTPConnection
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.http import HttpResponse
@@ -13,6 +14,7 @@ from .forms import CustomerForm
 from .forms import LoginForm
 from .forms import BackupForm
 from .models import Customer
+import pdb
 
 #Uncomment during testing
 #HTTP_TEST = 'http://http.test.twoefay.xyz'
@@ -26,8 +28,14 @@ s  = requests.Session()
 s.mount("https://twoefay.xyz", HTTP20Adapter())  
 
 def index(request):
+    pdb.set_trace()
+    c = HTTPConnection('twoefay.xyz', port=443)
+    c.request('GET', '/user/ross')
+    resp = c.get_response()
+    print(resp.read())
+    print (resp.headers())
     #r = requests.post(HTTP_TEST + PORT + '/register', json={'username' : 'test', 'email': 'email', 'phone':'phone'})
-    #print (r.json()['authenticated'])
+    #print (r.)
     return render(request, 'index.html', {'member_id':'32353'})
 
 def customer_new (request, template='customer_new.html'):
