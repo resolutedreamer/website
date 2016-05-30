@@ -15,24 +15,9 @@ from .forms import LoginForm
 from .forms import BackupForm
 from .models import Customer
 
-#Uncomment during testing
-#HTTP_TEST = 'http://http.test.twoefay.xyz'
-#Uncomment in https testing
-#HTTP_TEST = 'https://https.test.twoefay.xyz'
-#Uncomment in PROD
-#HTTP_TEST = 'https://twoefay.xyz'
-#PORT = ':8080'
-
-#s = requests.Session()
 c = HTTPConnection ('twoefay.xyz', port=443)
 
 def index(request):
-#    bar = 'hello'
-#    message = '{"foo":"' + bar + '"}'
-#    c.request('POST', '/backup', body=message.encode())
-#    resp = c.get_response()
-#    print(resp.read())
-
     if 'member_id' in request.session:
         member_id = request.session['member_id']
     else:
@@ -46,26 +31,9 @@ def customer_new (request, template='customer_new.html'):
         form = CustomerForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data.get('username')
-            if username:
-                print('cleaned username:' + username)
-            else:
-                print('no username')
             password = form.cleaned_data.get('password')
-            if password:
-                print('cleaned password: ' + password)
-            else:
-                print('no password')
             email = form.cleaned_data.get('email')
-            if email:
-                print('cleaned email: ' + email)
-            else:
-                print('no email')
             phone = form.cleaned_data.get('phone')
-            if phone:
-                print('cleaned phone: ' + phone)
-            else:
-                print('no phone')
-
             token = ''
             
             try:
@@ -91,9 +59,7 @@ def customer_new (request, template='customer_new.html'):
             
             if token == '':
                 return HttpResponse("Sign up successful but no twoefay")
-                #return render(request, 'half_success.html')
             return HttpResponse("Sign up successful")
-            #return render(request, 'success.html') 
 
     else:
         form = CustomerForm()
@@ -137,15 +103,7 @@ def login(request):
             form = LoginForm(request.POST)
             if form.is_valid():
                 username = form.cleaned_data.get('username')
-            if username:
-                print('cleaned username:' + username)
-            else:
-                print('no username')
             password = form.cleaned_data.get('password')
-            if password:
-                print('cleaned password: ' + password)
-            else:
-                print('no password')
 
             try:
                 customer = Customer.objects.get(username=username)
@@ -175,13 +133,6 @@ def login(request):
                             json_response = json.loads(decoded)
                             print (json_response)
                             verified = json_response['login']
-
-                            #r = s.post(HTTP_TEST + '/login', json={'token' : customer.token})
-                            #print (r.json()['login'])
-                            #json_response = r.json()
-                            
-                            #verified = json_response['login']
-                            #verified = 'unverified'
 
                             print('login success/failure/unverified: ' + verified)
                         except requests.exceptions.ReadTimeout as e:
@@ -232,18 +183,29 @@ def login(request):
                 if 'member_id' in request.session:
                     username = request.session['member_id']
                     print ('username: ' + username)
+                    login = 'failure'
+                    
+                    try:
+                        message = '{"username":"' + username + '", "otp":"' + otp + '"}'
+                        print ('making post request')
+                        c.request('POST', '/backup', body=message.encode())
+                        print ('made request')
+                        resp = c.get_response()
+                        print ('got response')
+                        decoded = (resp.read()).decode()
+                        print ('decoded: ' + decoded)
+                        print (len(decoded))
+                        if len(decoded) != 0:
+                            json_response = json.loads(decoded)
+                            print (json_response)
+                            login = json_response['login']
+                    except requests.exceptions.ReadTimeout as e:
+                            print ("backup read timeout")
+                    except requests.exceptions.ConnectTimeout as e:
+                            print ("backup connect timeout")
+                    except requests.exceptions.RequestException as e:
+                            print ("backup request exception")
 
-                    message = '{"username":"' + username + '", "otp":"' + otp + '"}'
-                    c.request('POST', '/backup', body=message.encode())
-                    resp = c.get_response()
-                    print (resp.read()['login'])
-                    login = resp.read()['login']
-
-                    #r = s.post(HTTP_TEST + '/backup', json={'username':username, 'otp':otp})
-                    #print (r.content)
-                    #json_response = r.json()
-                    #print (json_response['login'])
-                    #login = json_response['login']
                     if login == 'success':
                         request.session['auth_stage'] = 'Logged In'
                         return HttpResponse('successful sign in' + username)
@@ -270,65 +232,3 @@ def logout (request):
     if 'member_id' in request.session:
         del request.session['member_id']
     return HttpResponse('logged out')
-
-def backup_deprecated(request, template='backup.html'):
-    print ('serve backup page')
-    if 'auth_stage' in request.session:
-        if request.session['auth_stage'] == 'Logged In':
-            print ('auth_stage set to logged in')
-            return HttpResponse('You are already logged in...')
-        if request.session['auth_stage'] == 'Backup':
-            print ('auth_stage set to Backup')
-            form = BackupForm()
-            if request.method == 'POST':
-                form = BackupForm(request.POST)
-                print ('customer submitted form')
-                if form.is_valid():
-                    otp = form.cleaned_data.get('otp')
-                    if otp:
-                        print('cleaned otp:' + otp)
-                    else:
-                        print('no otp')
-                    if 'member_id' in request.session:
-                        username = request.session['member_id']
-                        print ('username: ' + username)
-
-                        message = '{"username":"' + username + '", "otp":"' + otp + '"}'
-                        c.request('POST', '/backup', body=message.encode())
-                        resp = c.get_response()
-                        print (resp.read()['login'])
-                        login = resp.read()['login']
-
-
-                        #r = s.post(HTTP_TEST + '/backup', json={'username':username, 'otp':otp})
-                        #r = requests.post(HTTP_TEST + '/backup', json={'username':username, 'otp':otp})
-                        #print (r.content)
-                        #json_response = r.json()
-                        #print (json_response['login'])
-                        #login = json_response['login']
-                        if login == 'success':
-                            return HttpResponse('successful sign in' + username)
-                        else:
-                            return HttpResponse('unsuccessful backup sign in')
-                    else:
-                        return HttpResponse('no member id but backup auth_stage session flag. big error')
-                else:
-                    return HttpResponse('form invalid')
-            else:
-                form = BackupForm()
-            return render(request, template, {'form' : form})
-
-    else:
-        return HttpResponse('You do not need a backup method since you have not logged in one factor yet. Please visit the login page')
-
-
-
-#def db(request):
-
-#    greeting = Greeting()
-#    greeting.save()
-
-#    greetings = Greeting.objects.all()
-
-#    return render(request, 'db.html', {'greetings': greetings})
-
