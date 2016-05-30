@@ -103,24 +103,24 @@ def login(request):
             form = LoginForm(request.POST)
             if form.is_valid():
                 username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
+                password = form.cleaned_data.get('password')
 
-            try:
-                customer = Customer.objects.get(username=username)
-            except Customer.DoesNotExist:
-                customer = None
+                try:
+                    customer = Customer.objects.get(username=username)
+                except Customer.DoesNotExist:
+                    customer = None
             
-            if customer == None:
-                return HttpResponse('username does not exist. please go sign up for an account')
-            else:
-                if password == customer.password:
-                    if customer.token == '':
-                        request.session['member_username'] = username
-                        request.session['auth_stage'] = 'Logged In'
-                        return HttpResponse('successful one-factor twoefay.')
+                if customer == None:
+                    return HttpResponse('username does not exist. please go sign up for an account')
+                else:
+                    if password == customer.password:
+                        if customer.token == '':
+                            request.session['member_username'] = username
+                            request.session['auth_stage'] = 'Logged In'
+                            return HttpResponse('successful one-factor twoefay.')
                         #TODO Include link to sign up for two-factor on a one-factor account
-                    else:
-                        verified = 'failure'
+                        else:
+                            verified = 'failure'
                         try:
                             message = '{"token":"'+ customer.token + '"}' 
                             c.request('POST', '/login', body=message.encode())
@@ -162,12 +162,12 @@ def login(request):
                             return render(request, 'backup.html', {'form':BackupForm()})
                         else:
                             return HttpResponse('ERROR: This should not happen ever.')
-                else:
-                    if 'member_id' in request.session:
-                        del request.session['member_id']
-                    if 'auth_stage' in request.session:
-                        del request.session['auth_stage']
-                    return HttpResponse('password is incorrect!')
+                    else:
+                        if 'member_id' in request.session:
+                            del request.session['member_id']
+                        if 'auth_stage' in request.session:
+                            del request.session['auth_stage']
+                        return HttpResponse('password is incorrect!')
 
         if form_type == 'backup':
             form = BackupForm(request.POST)
