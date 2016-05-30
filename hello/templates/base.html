@@ -130,6 +130,46 @@
     color: #007299;
     box-shadow: none;
 }
+
+.sign-in-up .left-inner-addon {
+    position: relative;
+}
+
+.sign-in-up .left-inner-addon input {
+    padding-left: 30px;
+}
+
+.sign-in-up .left-inner-addon i {
+    position: absolute;
+    padding: 10px 12px;
+    pointer-events: none;
+}
+
+.sign-in-up .right-inner-addon {
+    position: relative;
+}
+
+.sign-in-up .right-inner-addon input {
+    padding-right: 30px;
+}
+
+.sign-in-up .right-inner-addon i {
+    position: absolute;
+    right: 0px;
+    padding: 17px 12px;
+    pointer-events: none;
+}
+
+.sign-in-up .click2select {
+    text-align: center;
+    margin-top: 1em;
+}
+
+.sign-in-up .paywith {
+    padding: 12px 12px 0 0;
+    margin: 0;
+    font-weight: bold;
+}
     
   </style>
 </head>
@@ -141,7 +181,7 @@
         <a href="/"><span class="glyphicon glyphicon-home"></span> Home</a>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-info-sign"></span> Menu <span class="caret"></span></a>
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-cutlery"></span> Menu <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
             {% if user.is_authenticated %}
                 <li><a href="/logout/">Logout</a></li>
@@ -156,7 +196,7 @@
     </ul>
     <ul class="nav navbar-nav navbar-right">
       <li class="navbar-right">
-        <a href="https://devcenter.heroku.com"><span class="glyphicon glyphicon-book"></span> {% block member_id %} Guest{% endblock member_id %}</a>
+        <a href="https://devcenter.heroku.com"><span class="glyphicon glyphicon-user"></span> {% block member_id %} Guest{% endblock member_id %}</a>
       </li>
     </ul>
   </div>

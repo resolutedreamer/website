@@ -21,9 +21,9 @@ def index(request):
     if 'member_id' in request.session:
         member_id = request.session['member_id']
     else:
-        member_id = 'Guest'
+        request.session['member_id'] = 'Guest'
+        member_id = request.session['member_id']
 
-#    return render(request, 'big-notice.html', {'member_id':member_id, 'notice': 'error'})
     return render(request, 'index.html', {'member_id':member_id})
 
 def customer_new (request, template='customer_new.html'):
@@ -58,8 +58,8 @@ def customer_new (request, template='customer_new.html'):
             customer.save()
             
             if token == '':
-                return HttpResponse("Sign up successful but no twoefay")
-            return HttpResponse("Sign up successful")
+                return render(request, 'big-notice.html', {'member_id':member_id, 'notice': 'onefactor'}) 
+            return render(request, 'big-notice.html', {'member_id':member_id, 'notice': 'success'}) 
 
     else:
         form = CustomerForm()
@@ -92,7 +92,7 @@ def login(request):
             print ('are they equal ' + request.session['auth_stage'] + ' to ' + 'Backup')
             del request.session['auth_stage']
             print ('del request session')
-            return HttpResponse('this should never happen')
+            return render(request, 'big-notice.html', {'member_id':member_id, 'notice': 'error'}) 
     else:
         template = 'login.html'
         form_type = 'login'
@@ -111,7 +111,11 @@ def login(request):
                     customer = None
             
                 if customer == None:
-                    return HttpResponse('username does not exist. please go sign up for an account')
+                    member_id = 'Guest'
+                    request.session['member_id'] = member_id
+                    if 'auth_stage' in request.session:
+                        del request.session['auth_stage']
+                    return render(request, 'big-notice.html', {'member_id':member_id, 'notice': 'noaccount'}) 
                 else:
                     if password == customer.password:
                         if customer.token == '':
@@ -147,27 +151,28 @@ def login(request):
                             request.session['auth_stage'] = 'Logged In'
                             return HttpResponse('successful sign in with twoefay')
                         elif verified == 'failure':
-                            if 'member_id' in request.session:
-                                del request.session['member_id']
+                            member_id = 'Guest'
+                            request.session['member_id'] = member_id
                             if 'auth_stage' in request.session:
                                 del request.session['auth_stage']
-                            return HttpResponse('failure sign in with twoefay: you didnt authenticate with app, but you have one installed on your phone')
+                            return render(request, 'big-notice.html', {'member_id':member_id, 'notice': 'failtwoefay'}) 
                         elif verified == '':
-                            del request.session['member_id']
+                            member_id = 'Guest'
+                            request.session['member_id'] = member_id
                             del request.session['auth_stage']
-                            return HttpResponse('failure sign in with twoefay: twoefay server is down')
+                            return render(request, 'big-notice.html', {'member_id':member_id, 'notice': 'notwoefay'}) 
                         elif verified == 'unverified':
                             request.session['member_id'] = username
                             request.session['auth_stage'] = 'Backup'
                             return render(request, 'backup.html', {'form':BackupForm()})
                         else:
-                            return HttpResponse('ERROR: This should not happen ever.')
+                            return render(request, 'big-notice.html', {'member_id':member_id, 'notice': 'error'}) 
                     else:
-                        if 'member_id' in request.session:
-                            del request.session['member_id']
+                        member_id = 'Guest'
+                        request.session['member_id'] = member_id
                         if 'auth_stage' in request.session:
                             del request.session['auth_stage']
-                        return HttpResponse('password is incorrect!')
+                        return render(request, 'big-notice.html', {'member_id':member_id, 'notice': 'wrongpwd'}) 
 
         if form_type == 'backup':
             form = BackupForm(request.POST)
@@ -180,7 +185,7 @@ def login(request):
                     print('cleaned otp:' + otp)
                 else:
                     print('no otp')
-                if 'member_id' in request.session:
+                if 'member_id' in request.session and request.session['member_id'] != 'Guest':
                     username = request.session['member_id']
                     print ('username: ' + username)
                     login = 'failure'
@@ -212,11 +217,12 @@ def login(request):
                     else:
                         if 'auth_stage' in request.session:
                             del request.session['auth_stage']
-                        return HttpResponse('unsuccessful backup sign in')
+                        return render(request, 'big-notice.html', {'member_id':member_id, 'notice': 'failbackup'}) 
                 else:
-                    return HttpResponse('no member id but backup auth_stage session flag. big error')
+                    return render(request, 'big-notice.html', {'member_id':member_id, 'notice': 'error'}) 
+                    print('no member id but backup auth_stage session flag. big error')
             else:
-                return HttpResponse('form invalid')
+                return render(request, 'big-notice.html', {'member_id':member_id, 'notice': 'error'}) 
 
     else: 
         if form_type == 'login':
@@ -229,6 +235,5 @@ def login(request):
 def logout (request):
     if 'auth_stage' in request.session:
         del request.session['auth_stage']
-    if 'member_id' in request.session:
-        del request.session['member_id']
-    return HttpResponse('logged out')
+    request.session['member_id'] = 'Guest'
+    return render(request, 'big-notice.html', {'member_id':'Guest','notice': 'logout'}) 
