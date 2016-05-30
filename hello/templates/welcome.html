@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Welcome{% endblock title %}
+
+{% block content %}
+<div class="jumbotron">
+<div class="container">
+  <h1 class="center">Congratulations!</h1>
+  <h3 class="center">Head over to log in to your account and get ready for your next adventure!</h3>
+  <p class="center">We at Fay Travel are committed to guiding you through the best possible learning experience so you will have a lifetime of unique memories</p>
+<p class="center"> <a class="btn btn-primary btn-lg"  href="/login/" role="button">Login </a></p>
+</div>
+</div>
+  
+<div class="container text-center">    
+<p><br></p>
+  <a href="/signup/"><button type="button" class="btn btn-primary btn-lg outline fade">Refer a friend</button></a>
+<p><br></p>
+
+  <div class="row">
+    <div class="col-sm-4">
+      <img src="https://s-media-cache-ak0.pinimg.com/736x/36/9c/ac/369cac8a27335f9369b7d690cb722037.jpg" class="fade img-responsive fadehover" style="width:100%" alt="Image">
+      
+    </div>
+    <div class="col-sm-4"> 
+      <img src="http://spawellbeing.com/image/tunisia-4.jpg" class="img-responsive fade fadehover" style="width:100%" alt="Image">
+    </div>
+    <div class="col-sm-4">
+            <img src="http://narratographer.com/wp-content/uploads/2016/04/The-Lonely-Path-To-Pulpit-Rock-600x320.jpg" class="img-responsive fade fadehover" style="width:100%" alt="Image">
+
+
+      </div>
+  </div>
+</div><br>
+{% endblock content %}
+{% block member_id %} {{ member_id }} {% endblock member_id %}

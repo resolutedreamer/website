@@ -23,6 +23,7 @@ def index(request):
     else:
         member_id = 'Guest'
 
+#    return render(request, 'big-notice.html', {'member_id':member_id, 'notice': 'error'})
     return render(request, 'index.html', {'member_id':member_id})
 
 def customer_new (request, template='customer_new.html'):

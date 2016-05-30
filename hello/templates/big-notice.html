@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block title %}Welcome{% endblock title %}
+
+{% block content %}
+<div class="jumbotron">
+<div class="container">
+
+{# Sign up notices #}
+
+{% if notice == 'success' %}
+  <h1 class="center">Congratulations <span class="glyphicon glyphicon-fire"></span></h1>
+    <h3 class="center">Head over to log in to your account and get ready for your next adventure</h3>
+  <p class="center"><b>Note:</b> 2-factor authentication has been enabled for a <b>strong</b> and <i>secure</i> account. Please download the mobile application. For more info, click  <a href="#">here</a></p>
+<p class="center"> <a class="btn btn-primary btn-lg"  href="#" role="button"><span class="glyphicon glyphicon-cloud-download"></span> Download Twoefay App </a></p>
+{% endif %}
+
+{% if notice == 'onefactor' %}
+  <h1 class="center">Congratulations <span class="glyphicon glyphicon-fire"></span></h1>
+    <h3 class="center">Head over to log in to your account and get ready for your next adventure</h3>
+  <p class="center"><span class="glyphicon glyphicon-warning-sign"></span> <b><font color="red">Warning:</font></b> 2-factor authentication has <b>not</b> been enabled for your account. Twoefay servers are currently down. Please try again later by logging into your account. For more info, click  <a href="#">here</a></p>
+<p class="center"> <a class="btn btn-primary btn-lg"  href="/login/" role="button"><span class="glyphicon glyphicon-log-in"></span> Login </a></p>
+{% endif %}
+
+{# Log out Notice #}
+
+{% if notice == 'logout' %}
+<h1 class="center">Arrivederci <span class="glyphicon glyphicon-send"></span></h1>
+<p class="center">Come again soon! Your next adventure is awaiting you.</p>
+<p class="center"><a class="btn btn-primary btn-lg" href="/login/" role="button"><span class="glyphicon glyphicon-share-alt"></span> Sign back in </a></p>
+{% endif %}
+
+{# Sign in Notices #}
+
+{% if notice == 'noaccount' %}
+  <h1 class="center">Sorry <span class="glyphicon glyphicon-thumbs-down"></span></h1>
+  <p class = "center">There's no account with that username. Please sign up!</p>
+   <p class="center"><a class="btn btn-primary btn-lg" href="/signup/" role="button"><span class="glyphicon glyphicon-ice-lolly-tasted"></span> Sign up </a></p>
+{% endif %}
+
+{% if notice == 'wrongpwd' %}
+  <h1 class="center">Sorry <span class="glyphicon glyphicon-thumbs-down"></span></h1>
+  <p class="center">Username and password do not match.</p>
+   <p class="center"><a class="btn btn-primary btn-lg" href="/login/" role="button"><span class="glyphicon glyphicon-share-alt"></span> Try again </a></p>
+{% endif %}
+
+{% if notice == 'failtwoefay' %}
+  <h1 class="center">Sorry <span class="glyphicon glyphicon-thumbs-down"></span></h1>
+  <p class="center">2-factor authentication failed. For more info, click <a href="#">here</a> </p>
+   <p class="center"><a class="btn btn-primary btn-lg" href="/login/" role="button"><span class="glyphicon glyphicon-share-alt"></span> Try again </a></p>
+{% endif %}
+
+{% if notice == 'notwoefay' %}
+  <h1 class="center">Sorry <span class="glyphicon glyphicon-thumbs-down"></span></h1>
+  <p class="center">Our 2-factor authentication system is currently down. Please try again later!</p>
+   <p class="center"><a class="btn btn-primary btn-lg" href="/" role="button"><span class="glyphicon glyphicon-share-alt"></span> Go home </a></p>
+{% endif %}
+
+{% if notice == 'failbackup' %}
+  <h1 class="center">Sorry <span class="glyphicon glyphicon-thumbs-down"></span></h1>
+  <p class="center">Backup 2-factor authentication failed. For more info, click <a href="#">here</a></p>
+   <p class="center"><a class="btn btn-primary btn-lg" href="/login/" role="button"><span class="glyphicon glyphicon-share-alt"></span> Try again </a></p>
+{% endif %}
+
+{% if notice == 'error' %}
+     <h1 class="center"><span class="glyphicon glyphicon-alert"></span> Uh-oh! <span class="glyphicon glyphicon-alert"></span></h1>
+  <p class="center">If you can see this, something has gone <font color="red">terribly wrong</font>. </p>
+   <p class="center"><a class="btn btn-primary btn-lg" href="/" role="button"><span class="glyphicon glyphicon-glass"></span> Fun's over. Go home! </a></p>
+{% endif %}
+
+</div>
+</div>
+  
+<div class="container text-center">    
+
+  <a href="/signup/"><button type="button" class="btn btn-primary btn-lg outline fade">Refer a friend</button></a>
+<p><br></p>
+
+  <div class="row">
+    <div class="col-sm-4">
+      <img src="https://s-media-cache-ak0.pinimg.com/736x/36/9c/ac/369cac8a27335f9369b7d690cb722037.jpg" class="fade img-responsive fadehover" style="width:100%" alt="Image">
+      
+    </div>
+    <div class="col-sm-4"> 
+      <img src="http://spawellbeing.com/image/tunisia-4.jpg" class="img-responsive fade fadehover" style="width:100%" alt="Image">
+    </div>
+    <div class="col-sm-4">
+            <img src="http://narratographer.com/wp-content/uploads/2016/04/The-Lonely-Path-To-Pulpit-Rock-600x320.jpg" class="img-responsive fade fadehover" style="width:100%" alt="Image">
+
+
+      </div>
+  </div>
+</div><br>
+{% endblock content %}
+{% block member_id %} {{ member_id }} {% endblock member_id %}
