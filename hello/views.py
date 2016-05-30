@@ -27,6 +27,14 @@ def index(request):
     return render(request, 'index.html', {'member_id':member_id})
 
 def customer_new (request, template='customer_new.html'):
+    if 'member_id' in request.session:
+        if request.session['member_id'] != 'Guest':
+            return HttpResponse('youre already logged in!')
+    else:
+        request.session['member_id'] = 'Guest'
+
+    member_id = request.session['member_id']
+
     if request.method == 'POST':
         form = CustomerForm(request.POST)
         if form.is_valid():
