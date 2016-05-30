@@ -22,7 +22,6 @@ def index(request):
         member_id = request.session['member_id']
     else:
         member_id = 'Guest'
-        request.session['member_id' ] = 'Fay'
 
     return render(request, 'index.html', {'member_id':member_id})
 
