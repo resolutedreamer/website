@@ -27,11 +27,11 @@ from .models import Customer
 c = HTTPConnection ('twoefay.xyz', port=443)
 
 def index(request):
-    bar = 'hello'
-    message = '{"foo":"' + bar + '"}'
-    c.request('POST', '/backup', body=message.encode())
-    resp = c.get_response()
-    print(resp.read())
+#    bar = 'hello'
+#    message = '{"foo":"' + bar + '"}'
+#    c.request('POST', '/backup', body=message.encode())
+#    resp = c.get_response()
+#    print(resp.read())
 
     if 'member_id' in request.session:
         member_id = request.session['member_id']
