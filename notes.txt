@@ -18,3 +18,25 @@ Signup:
 2: half_success.html for if twoefay is hung
 
 5: Fix UI
+
+
+
+bar = 'hello'
+message = '{"foo":"' + bar + '"}'
+c.request('POST', '/backup', body=message.encode())
+resp = c.get_response()
+print (resp.read())
+#resp.read()['token']		 
+
+
+                message = '{"username":"' + username + '", "email":"' + email + '", "phone":"' + phone + '"}'
+			print ('making post request')
+                c.request('POST', '/register', body=message.encode())
+				  print ('made request')
+                resp = c.get_response()
+		     print ('got response')decoded = (resp.read()).decode()
+print (decoded)
+print (type(decoded))
+json_response =	json.loads(decoded)
+print (json_response)
+token = json_response['token']

@@ -14,29 +14,32 @@ from .forms import CustomerForm
 from .forms import LoginForm
 from .forms import BackupForm
 from .models import Customer
-import pdb
 
 #Uncomment during testing
 #HTTP_TEST = 'http://http.test.twoefay.xyz'
 #Uncomment in https testing
-HTTP_TEST = 'https://https.test.twoefay.xyz'
+#HTTP_TEST = 'https://https.test.twoefay.xyz'
 #Uncomment in PROD
 #HTTP_TEST = 'https://twoefay.xyz'
 #PORT = ':8080'
 
-s  = requests.Session()                                                                                                                                                     
-s.mount("https://twoefay.xyz", HTTP20Adapter())  
+#s = requests.Session()
+c = HTTPConnection ('twoefay.xyz', port=443)
 
 def index(request):
-    pdb.set_trace()
-    c = HTTPConnection('twoefay.xyz', port=443)
-    c.request('GET', '/user/ross')
+    bar = 'hello'
+    message = '{"foo":"' + bar + '"}'
+    c.request('POST', '/backup', body=message.encode())
     resp = c.get_response()
     print(resp.read())
-    print (resp.headers())
-    #r = requests.post(HTTP_TEST + PORT + '/register', json={'username' : 'test', 'email': 'email', 'phone':'phone'})
-    #print (r.)
-    return render(request, 'index.html', {'member_id':'32353'})
+
+    if 'member_id' in request.session:
+        member_id = request.session['member_id']
+    else:
+        member_id = 'Guest'
+        request.session['member_id' ] = 'Fay'
+
+    return render(request, 'index.html', {'member_id':member_id})
 
 def customer_new (request, template='customer_new.html'):
     if request.method == 'POST':
@@ -66,23 +69,22 @@ def customer_new (request, template='customer_new.html'):
             token = ''
             
             try:
-                #TODO For PROD:
-                #s = requests.Session()
-                #s.mount("https://twoefay.xyz", HTTP20Adapter())
-                r = s.post(HTTP_TEST + '/register', json={'username':username, 'email':email, 'phone':phone})
-                
-                #For test env:
-                #r = requests.post(HTTP_TEST + '/register', json={'username':username, 'email':email, 'phone':phone})
-                print (r.content)
-                json_response = r.json()
-                print (json_response['token'])
+                message = '{"username":"' + username + '", "email":"' + email + '", "phone":"' + phone + '"}'
+                print ('making post request')
+                c.request('POST', '/register', body=message.encode())
+                resp = c.get_response()
+                print ('got response')
+                decoded = (resp.read()).decode()
+                json_response = json.loads(decoded)
+                print (json_response)
                 token = json_response['token']
+
             except requests.exceptions.ConnectTimeout as e:
                 print ("Signup connect timeout")
             except requests.exceptions.ReadTimeout as e:
                 print ("Signup read timeout")
-            #except requests.exceptions.RequestException as e:
-            #    print ("Signup request exception")
+            except requests.exceptions.RequestException as e:
+                print ("Signup request exception")
                 
             customer = Customer(username=username, password=password, email=email, phone=phone, token=token)
             customer.save()
@@ -162,13 +164,25 @@ def login(request):
                     else:
                         verified = 'failure'
                         try:
-                            r = s.post(HTTP_TEST + '/login', json={'token' : customer.token})
-                            #r = requests.post(HTTP_TEST + '/login', json={'token':customer.token})
-                            print (r.json()['login'])
-                            json_response = r.json()
-                            #TODO Remove in PROD
+                            message = '{"token":"'+ customer.token + '"}' 
+                            c.request('POST', '/login', body=message.encode())
+                            print ('made request')
+                            resp = c.get_response()
+                            print ('got response')
+                            decoded = (resp.read()).decode()
+                            print (decoded)
+                            print (type(decoded))
+                            json_response = json.loads(decoded)
+                            print (json_response)
                             verified = json_response['login']
+
+                            #r = s.post(HTTP_TEST + '/login', json={'token' : customer.token})
+                            #print (r.json()['login'])
+                            #json_response = r.json()
+                            
+                            #verified = json_response['login']
                             #verified = 'unverified'
+
                             print('login success/failure/unverified: ' + verified)
                         except requests.exceptions.ReadTimeout as e:
                             print ("Login read timeout")
@@ -218,12 +232,18 @@ def login(request):
                 if 'member_id' in request.session:
                     username = request.session['member_id']
                     print ('username: ' + username)
-                    r = s.post(HTTP_TEST + '/backup', json={'username':username, 'otp':otp})
-                    #r = requests.post(HTTP_TEST + '/backup', json={'username':username, 'otp':otp})
-                    print (r.content)
-                    json_response = r.json()
-                    print (json_response['login'])
-                    login = json_response['login']
+
+                    message = '{"username":"' + username + '", "otp":"' + otp + '"}'
+                    c.request('POST', '/backup', body=message.encode())
+                    resp = c.get_response()
+                    print (resp.read()['login'])
+                    login = resp.read()['login']
+
+                    #r = s.post(HTTP_TEST + '/backup', json={'username':username, 'otp':otp})
+                    #print (r.content)
+                    #json_response = r.json()
+                    #print (json_response['login'])
+                    #login = json_response['login']
                     if login == 'success':
                         request.session['auth_stage'] = 'Logged In'
                         return HttpResponse('successful sign in' + username)
@@ -272,12 +292,20 @@ def backup_deprecated(request, template='backup.html'):
                     if 'member_id' in request.session:
                         username = request.session['member_id']
                         print ('username: ' + username)
-                        r = s.post(HTTP_TEST + '/backup', json={'username':username, 'otp':otp})
+
+                        message = '{"username":"' + username + '", "otp":"' + otp + '"}'
+                        c.request('POST', '/backup', body=message.encode())
+                        resp = c.get_response()
+                        print (resp.read()['login'])
+                        login = resp.read()['login']
+
+
+                        #r = s.post(HTTP_TEST + '/backup', json={'username':username, 'otp':otp})
                         #r = requests.post(HTTP_TEST + '/backup', json={'username':username, 'otp':otp})
-                        print (r.content)
-                        json_response = r.json()
-                        print (json_response['login'])
-                        login = json_response['login']
+                        #print (r.content)
+                        #json_response = r.json()
+                        #print (json_response['login'])
+                        #login = json_response['login']
                         if login == 'success':
                             return HttpResponse('successful sign in' + username)
                         else:
