@@ -1,5 +1,4 @@
-{% e
-xtends 'base.html' %}
+{% extends 'base.html' %}
 {% block title %}Welcome{% endblock title %}
 
 {% block content %}
@@ -8,7 +7,7 @@ xtends 'base.html' %}
   <h1 class="center">Welcome, {{ member_id }}!</h1>
   <p class="center">Here are your upcoming trips: </p>
   {% if notice == 'loggedin' %}
-  <p class="center">You've already logged in.</p>
+ 
   {% endif %}
   {% if notice == 'one-factor' %}
   <p class="center">You logged in with just one factor. To sign up for two factor, please press here</p>
@@ -16,6 +15,38 @@ xtends 'base.html' %}
   {% if notice == 'two-factor' %}
   <p class="center">You logged in with two factor</p>
   {% endif %}
+  
+  {# display upcoming trips demo #}
+  <table class="table table-hover">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Destination</th>
+      <th>Dates</th>
+      <th>Travel Companions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <td>Hawaii</td>
+      <td>June 12 - 13, 2016</td>
+      <td>Caroline</td>
+    </tr>
+    <tr>
+      <th scope="row">2</th>
+      <td>Vancouver</td>
+      <td>July 3 - 4, 2016</td>
+      <td>Jessica</td>
+    </tr>
+    <tr>
+      <th scope="row">3</th>
+      <td >British Isles</td>
+      <td> Sept 10 - 11, 2016</td>
+      <td>Jasmine</td>
+    </tr>
+  </tbody>
+</table>
 </div>
 </div>
   
