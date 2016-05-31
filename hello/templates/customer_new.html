@@ -2,103 +2,71 @@
 {% block title %}Signup{% endblock title %}
 
 {% block content %}
+<div class="jumbotron">
     <div id="content-container" class="container p-none">
-        <div class="side-p">
+      <div class="sign-in-up">
             <form id="user-reg-form" action="." method="post">
                 {% csrf_token %}
                 {# Username & Password Section #}
-                <h3>Signup for an ccount</h3>
-                <h5 class="sn-sh">CREATE A USERNAME AND PASSWORD</h5>
-                <table class="table">
-                    <tbody>
+                <h1 align="center" class="fade">Begin <span class="glyphicon glyphicon-globe"></span></h1>
+                <table align="center" class="fade sign-in-up">
+                    <tbody class="fade">
                         <tr>
-                            <th>{{ form.username.label }}</th>
-                            <th>{{ form.email.label }}</th>
-			    <th>{{ form.phone.label }}</th>
-                        </tr>
-                        <tr>
-                            <td>{{ form.username }}</td>
-                            <td>{{ form.email }}</td>
-			    <td>{{ form.phone }}</td>
-                        </tr>
-                        <tr>
-                            <td>{{ form.username.errors }}</td>
-                            <td>{{ form.email.errors }}</td>
-			    <td>{{ form.phone.errors }}</td>
-                        </tr>
-                        <tr>
-                            <th>{{ form.password.label }}</th>
-                        </tr>
-                        <tr>
-                            <td>{{ form.password }}</td>
-                        </tr>
-                        <tr>
+                            <th><h2 class="fade" align="left">Username</h2></th>
+			    <th> <font color="black">{{ form.username }} </font></th>
+			</tr>
+			<tr>
+			  <td> {{ form.username.errors }} </td>
+		        </tr>
+			<tr>
+			    <th><h2 class="fade" align="left">Email</h2></th>
+			    <th> <font color="black">{{ form.email }} </font></th>
+			</tr>
+			<tr>
+			  <td> {{ form.email.errors }} </td>
+			</td>
+			<tr>
+			    <th><h2 class="fade" align="left">Phone</h2></th>
+			    <th> <font color="black">{{ form.phone }} </font></th>
+			</tr>
+			<tr>
+			  <td> {{ form.phone.errors }} </td>
+			</tr>
+			<tr>
+			    <th><h2 class="fade" align="left">Password</h2></th>
+			    <th> <font color="black">{{ form.password }} </font></th>
+			</tr>
+			<tr>
                             <td>{{ form.password.errors }}</td>
-                        </tr>
+			</tr>
+
                     </tbody>
                 </table>
-                <input class="btn btn-primary" type="submit" value="submit">
+                <h5 align="center" class="fade"><input class="btn btn-primary fade" type="submit" value="submit"></h5>
             </form>
         </div>
     </div>
-<div class="jumbotron">
-<div class="container sign-in-up">
+</div>
+
+<div class="container text-center">
+<p><br></p>
+  <a href="/signup/"><button type="button" class="btn btn-primary btn-lg outline fade">Refer a friend</button></a>
+<p><br></p>
+
   <div class="row">
-    <div class="col-md-4 col-md-offset-4">
-      <br>
-      <!-- Nav tabs -->
-      <div class="text-center">
-	<h1 align="center" class="fade">Begin <span class="glyphicon glyphicon-globe"></span></h1>
-      </div>
-      <div class="tab-content">
-        <div class="tab-pane fade in active" id="new">
-          <br>
-          <fieldset>
-            <div class="form-group">
-              <div class="right-inner-addon">
-                <i class="fa fa-envelope"></i>
-                <input class="form-control input-lg" placeholder="Email" type="text"> 
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="right-inner-addon">
-                <i class="fa fa-key"></i>
-                <input class="form-control input-lg" placeholder="Password" type="password"> 
-              </div>
-            </div>
-<!--            <div class="form-group">
-              <div class="right-inner-addon">
-                <i class="fa fa-key"></i>
-                <input class="form-control input-lg" placeholder="Confirm Password" id="" type="password">
-              </div>
-            </div>-->
-          </fieldset>
-          <hr>
-        </div>
-        <div class="tab-pane fade" id="user">
-          <br>
-          <fieldset>
-            <div class="form-group">
-              <div class="right-inner-addon">
-                <i class="fa fa-envelope"></i>
-                <input class="form-control input-lg" placeholder="Email Address" type="text">
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="right-inner-addon">
-                <i class="fa fa-key"></i>
-                <input class="form-control input-lg" placeholder="Password" type="password">
-              </div>
-            </div>
-          </fieldset>
-          <br>
-          <div class=" text-center">
-            <button class="btn btn-primary">LOGIN</button>
-          </div>
-        </div>
-      </div>
+    <div class="col-sm-4">
+      <img src="https://s-media-cache-ak0.pinimg.com/736x/36/9c/ac/369cac8a27335f9369b7d690cb722037.jpg" class="fade img-responsive fadehover" style="width:100%" alt="Image">
+
     </div>
+    <div class="col-sm-4">
+      <img src="http://spawellbeing.com/image/tunisia-4.jpg" class="img-responsive fade fadehover" style="width:100%" alt="Image">
+    </div>
+    <div class="col-sm-4">
+            <img src="http://narratographer.com/wp-content/uploads/2016/04/The-Lonely-Path-To-Pulpit-Rock-600x320.jpg" class="img-responsive fade fadehover" style="width:100%" alt="Image">
+
+
+      </div>
   </div>
-</div></div>
+</div><br>
 
 {% endblock content %}

@@ -4,10 +4,17 @@
 {% block content %}
 <div class="jumbotron">
 <div class="container">
-  <h1 class="center">Congratulations!</h1>
-  <h3 class="center">Head over to log in to your account and get ready for your next adventure!</h3>
-  <p class="center">We at Fay Travel are committed to guiding you through the best possible learning experience so you will have a lifetime of unique memories</p>
-<p class="center"> <a class="btn btn-primary btn-lg"  href="/login/" role="button">Login </a></p>
+  <h1 class="center">Welcome, {{ member_id }}!</h1>
+  <p class="center">Here are your upcoming trips: </p>
+  {% if notice == 'loggedin' %}
+  <p class="center">You've already logged in.</p>
+  {% endif %}
+  {% if notice == 'one-factor' %}
+  <p class="center">You logged in with just one factor. To sign up for two factor, please press here</p>
+  {% endif %}
+  {% if notice == 'two-factor' %}
+  <p class="center">You logged in with two factor</p>
+  {% endif %}
 </div>
 </div>
   

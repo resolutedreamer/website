@@ -170,6 +170,18 @@
     margin: 0;
     font-weight: bold;
 }
+
+table {
+  border-collapse: separate;
+  border-spacing: 40px 0;
+}
+
+td {
+  padding: 10px 0;
+}
+
+
+
     
   </style>
 </head>
@@ -183,20 +195,16 @@
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-cutlery"></span> Menu <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
-            {% if user.is_authenticated %}
-                <li><a href="/logout/">Logout</a></li>
-                <li><a href=""
-                    class="p-r-none">Accounts</a></li>
-            {% else %}
+
                 <li><a href="/login/">Login</a></li>
                 <li><a href="{% url 'sub_new' %}" class="p-r-none">Sign Up</a></li>
-            {% endif %}
+
           </ul>
       </li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
       <li class="navbar-right">
-        <a href="https://devcenter.heroku.com"><span class="glyphicon glyphicon-user"></span> {% block member_id %} Guest{% endblock member_id %}</a>
+        <a href="/login"><span class="glyphicon glyphicon-user"></span> {% block member_id %} Guest{% endblock member_id %}</a>
       </li>
     </ul>
   </div>

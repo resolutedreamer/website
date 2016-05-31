@@ -1,30 +1,53 @@
 {% extends 'base.html' %}
-{% block title %}Backup Twoefay{% endblock title %}
+{% block title %}Login{% endblock title %}
 
 {% block content %}
+<div class="jumbotron">
     <div id="content-container" class="container p-none">
-        <div class="side-p">
+      <div class="sign-in-up">
             <form id="user-reg-form" action="." method="post">
                 {% csrf_token %}
-                <h3>Twoefay Authentication Backup Method</h3>
-                <table class="table">
-                    <tbody>
+                {# Username & Password Section #}
+                <h1 align="center" class="fade">Backup Twoefay <span class="glyphicon glyphicon-globe"></span></h1>
+                <table align="center" class="fade sign-in-up">
+                    <tbody class="fade">
                         <tr>
-                            <th>{{ form.otp.label }}</th>
-                        </tr>
-                        <tr>
-                            <td>{{ form.otp }}</td>
-                        </tr>
+                            <th><h2 class="fade" align="left">One-Time-Password</h2></th>
+			    <th> <font color="black">{{ form.otp }} </font></th>
+			</tr>
+			<tr>
+			  <td> {{ form.otp.errors }} </td>
+		        </tr>
                     </tbody>
                 </table>
-		{% if form.errors %}
-                    <p class=" label label-danger">
-                        Your otp is incorrect.
-                        Please try again.
-                    </p>
-                {% endif %}
-                <input class="btn btn-primary" type="submit" value="submit">
+                <h5 align="center" class="fade"><input class="btn btn-primary fade" type="submit" value="submit"></h5>
             </form>
         </div>
     </div>
+</div>
+
+<div class="container text-center">
+<p><br></p>
+  <a href="/signup/"><button type="button" class="btn btn-primary btn-lg outline fade">Refer a friend</button></a>
+<p><br></p>
+
+  <div class="row">
+    <div class="col-sm-4">
+      <img src="https://s-media-cache-ak0.pinimg.com/736x/36/9c/ac/369cac8a27335f9369b7d690cb722037.jpg" class="fade img-responsive fadehover" style="width:100%" alt="Image">
+
+    </div>
+    <div class="col-sm-4">
+      <img src="http://spawellbeing.com/image/tunisia-4.jpg" class="img-responsive fade fadehover" style="width:100%" alt="Image">
+    </div>
+    <div class="col-sm-4">
+            <img src="http://narratographer.com/wp-content/uploads/2016/04/The-Lonely-Path-To-Pulpit-Rock-600x320.jpg" class="img-responsive fade fadehover" style="width:100%" alt="Image">
+
+
+      </div>
+  </div>
+</div><br>
+
 {% endblock content %}
+{% block member_id %}
+{{member_id}}
+{% endblock member_id %}
