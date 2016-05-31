@@ -195,10 +195,14 @@ td {
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-cutlery"></span> Menu <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
-
-                <li><a href="/login/">Login</a></li>
-                <li><a href="{% url 'sub_new' %}" class="p-r-none">Sign Up</a></li>
-
+	        {% if member_id == 'Guest' %}
+		<li><a href="/login/">Login</a></li>
+		<li><a href="{% url 'sub_new' %}" class="p-r-none">Sign Up</a></li>
+		{% endif %}
+                
+		{% if member_id != 'Guest' %}
+		<li><a href="/logout/">Logout</a></li>
+		{% endif %}
           </ul>
       </li>
     </ul>
