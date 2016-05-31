@@ -90,8 +90,7 @@ def login(request):
             form = BackupForm()
         elif request.session['auth_stage'] == 'Logged In':
             print ('you are already logged in')
-            #TODO: Give them option to log out, don't auto log them out
-            return HttpResponse('you already logged in. go log out first')
+            return render(request, 'welcome.html', {'member_id':member_id, 'notice':'loggedin'})
 
         else:
             print ('are they equal ' + request.session['auth_stage'] + ' to ' + 'Backup')
