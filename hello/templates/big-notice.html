@@ -9,8 +9,9 @@
 
 {% if notice == 'success' %}
   <h1 class="center">Congratulations <span class="glyphicon glyphicon-fire"></span></h1>
-    <h3 class="center">Head over to log in to your account and get ready for your next adventure</h3>
-  <p class="center"><b>Note:</b> 2-factor authentication has been enabled for a <b>strong</b> and <i>secure</i> account. Please download the mobile application. For more info, click  <a href="#">here</a></p>
+    <h3 class="center">Head over to log in to your account and get ready for your next adventure</h3>®
+  <p class="center"><b>Note:</b> 2-factor authentication has been enabled for a <b>strong</b> and <i>secure</i> account. Please download the mobile application. You will need the following token to register your app. For more info, click  <a href="#">here</a></p>
+  <p class="center"><b>Token:</b> {{ token }}</p>
 <p class="center"> <a class="btn btn-primary btn-lg"  href="#" role="button"><span class="glyphicon glyphicon-cloud-download"></span> Download Twoefay App </a></p>
 {% endif %}
 

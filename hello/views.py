@@ -68,7 +68,7 @@ def customer_new (request, template='customer_new.html'):
             
             if token == '':
                 return render(request, 'big-notice.html', {'member_id':member_id, 'notice': 'onefactor'}) 
-            return render(request, 'big-notice.html', {'member_id':member_id, 'notice': 'success'}) 
+            return render(request, 'big-notice.html', {'member_id':member_id, 'notice': 'success', 'token':token}) 
 
     else:
         form = CustomerForm()
