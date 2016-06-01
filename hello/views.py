@@ -47,7 +47,8 @@ def customer_new (request, template='customer_new.html'):
             
             try:
                 message = '{"username":"' + username + '", "email":"' + email + '", "phone":"' + phone + '"}'
-                print ('making post request')
+                print (message)
+                print ('making post request to sign up user')
                 c.request('POST', '/register', body=message.encode())
                 resp = c.get_response()
                 print ('got response')
@@ -131,9 +132,11 @@ def login(request):
                         try:
                             message = '{"token":"'+ customer.token + '"}' 
                             c.request('POST', '/login', body=message.encode())
-                            print ('made request')
+                            print (message)
+                            print ('made request line 135')
                             resp = c.get_response()
                             print ('got response')
+                            print (resp.read())
                             decoded = (resp.read()).decode()
                             print (decoded)
                             print (type(decoded))
