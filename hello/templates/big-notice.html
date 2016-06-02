@@ -44,6 +44,11 @@
    <p class="center"><a class="btn btn-primary btn-lg" href="/login/" role="button"><span class="glyphicon glyphicon-share-alt"></span> Try again </a></p>
 {% endif %}
 
+{% if notice == 'waiting' %}
+   <h1 class="center">Waiting...</h1>
+   <p class="center">Please check your phone for a Twoefay app notification to authenticate using your fingerprint. For more info, click <a href="#">here</a></p>
+{% endif %}
+
 {% if notice == 'failtwoefay' %}
   <h1 class="center">Sorry <span class="glyphicon glyphicon-thumbs-down"></span></h1>
   <p class="center">2-factor authentication failed. For more info, click <a href="#">here</a> </p>

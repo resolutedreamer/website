@@ -92,7 +92,51 @@ def login(request):
         elif request.session['auth_stage'] == 'Logged In':
             print ('you are already logged in')
             return render(request, 'welcome.html', {'member_id':member_id, 'notice':'loggedin'})
+        elif request.session['auth_stage'] == 'waiting':
+            for i in range(0, 30):
+                print ('poll count: ' + i+1)
 
+                try:
+                    message = '{"token":"'+ customer.token + '"}'
+                    c.request('POST', '/auth', body=message.encode())
+                    print (message)
+                    print ('made request line 103')
+                    resp = c.get_response()
+                    print ('got response')
+                    print (resp.read())
+                    decoded = (resp.read()).decode()
+                    print (decoded)
+                    print (type(decoded))
+                    json_response = json.loads(decoded)
+                    print (json_response)
+                    auth_response = json_response['auth']
+
+                    print('login verified/unverified: ' + verified)
+                except requests.exceptions.ReadTimeout as e:
+                    print ("Login read timeout")
+                except requests.exceptions.ConnectTimeout as e:
+                    print ("Login connect timeout")
+                except requests.exceptions.RequestException as e:
+                    print ("Login request exception")                    
+
+                if auth_resp == 'success':
+                    request.session['member_username'] = username                                            
+                    request.session['auth_stage'] = 'Logged In'
+                    return render(request, 'welcome.html', {'member_id':member_id, 'notice':'two-factor'}) 
+                elif auth_resp == 'failiure':
+                    member_id = 'Guest'
+                    request.session['member_id'] = member_id
+                    if 'auth_stage' in request.session:
+                        del request.session['auth_stage']
+                    return render(request, 'big-notice.html', {'member_id':member_id, 'notice':'failtwoefay'})
+                elif auth_resp == 'wait':
+                    time.sleep(1)
+            #considered failure
+            member_id = 'Guest'
+            request.session['member_id'] = member_id
+            if 'auth_stage' in request.session:
+                del request.session['auth_stage']
+            return render(request, 'big-notice.html', {'member_id':member_id, 'notice':'failtwoefay'})
         else:
             print ('are they equal ' + request.session['auth_stage'] + ' to ' + 'Backup')
             del request.session['auth_stage']
@@ -129,11 +173,12 @@ def login(request):
                             return render(request, 'welcome.html', {'member_id':member_id, 'notice':'one-factor'})
                         else:
                             verified = 'failure'
+
                         try:
                             message = '{"token":"'+ customer.token + '"}' 
                             c.request('POST', '/login', body=message.encode())
                             print (message)
-                            print ('made request line 135')
+                            print ('made request line 181')
                             resp = c.get_response()
                             print ('got response')
                             print (resp.read())
@@ -144,7 +189,7 @@ def login(request):
                             print (json_response)
                             verified = json_response['login']
 
-                            print('login success/failure/unverified: ' + verified)
+                            print('login verified/unverified: ' + verified)
                         except requests.exceptions.ReadTimeout as e:
                             print ("Login read timeout")
                         except requests.exceptions.ConnectTimeout as e:
@@ -152,16 +197,20 @@ def login(request):
                         except requests.exceptions.RequestException as e:
                             print ("Login request exception")
 
-                        if verified == 'success':
+                        #if verified == 'success':
+                        #    request.session['member_username'] = username
+                        #    request.session['auth_stage'] = 'Logged In'
+                        #    return render(request, 'welcome.html', {'member_id':member_id, 'notice':'two-factor'})
+                        #elif verified == 'failure':
+                        #    member_id = 'Guest'
+                        #    request.session['member_id'] = member_id
+                        #    if 'auth_stage' in request.session:
+                        #        del request.session['auth_stage']
+                        #    return render(request, 'big-notice.html', {'member_id':member_id, 'notice': 'failtwoefay'}) 
+                        if verified == 'verified':
                             request.session['member_username'] = username
-                            request.session['auth_stage'] = 'Logged In'
-                            return render(request, 'welcome.html', {'member_id':member_id, 'notice':'two-factor'})
-                        elif verified == 'failure':
-                            member_id = 'Guest'
-                            request.session['member_id'] = member_id
-                            if 'auth_stage' in request.session:
-                                del request.session['auth_stage']
-                            return render(request, 'big-notice.html', {'member_id':member_id, 'notice': 'failtwoefay'}) 
+                            request.session['auth_stage'] = 'waiting'
+                            return render (request, 'big-notice.html', {'member_id':member_id, 'notice':'waiting'})
                         elif verified == '':
                             member_id = 'Guest'
                             request.session['member_id'] = member_id
