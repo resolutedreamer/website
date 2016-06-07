@@ -159,6 +159,7 @@ def login(request):
                             request.session['member_id'] = username
                             request.session['auth_stage'] = 'waiting'
                             try:
+                                print ('display waiting for auth page')
                                 return render (request, 'big-notice.html', {'member_id':member_id, 'notice':'waiting'})
                             finally:
                                 for i in range(0, 30):
